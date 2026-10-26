@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>География: қоныстану және қала халқы</title>
+<style>
+:root{--bg:#f6f5f0;--card:#fff;--fg:#1f2430;--mut:#667085;--acc:#2a6f5b;--onacc:#fff;--ok:#1a7f4b;--bad:#c0392b;--bd:#e0ded6;--okbg:#e6f4ec;--badbg:#fbeae8;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#14171c;--card:#1d2127;--fg:#e8eaee;--mut:#9aa3b2;--acc:#5fb89a;--onacc:#10231c;--ok:#5fd39a;--bad:#ff8a7d;--bd:#323843;--okbg:#17302a;--badbg:#3a1f1c}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#14171c;--card:#1d2127;--fg:#e8eaee;--mut:#9aa3b2;--acc:#5fb89a;--onacc:#10231c;--ok:#5fd39a;--bad:#ff8a7d;--bd:#323843;--okbg:#17302a;--badbg:#3a1f1c}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:680px;margin:0 auto;padding:20px 16px 40px}
+h1{font-size:1.4rem;margin:8px 0 4px}
+h2{font-size:1.1rem;margin:28px 0 10px}
+.sub{color:var(--mut);margin:0 0 16px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:16px;margin-bottom:12px}
+.card.ok{background:var(--okbg);border-color:var(--ok)}
+.card.bad{background:var(--badbg);border-color:var(--bad)}
+input{width:100%;font:inherit;padding:10px 12px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--fg);margin-top:8px}
+button{font:inherit;font-weight:600;padding:11px 18px;border:0;border-radius:8px;background:var(--acc);color:var(--onacc);margin-top:12px;cursor:pointer}
+.hint{color:var(--mut);font-size:.9rem}
+.err{color:var(--bad);font-size:.9rem;margin-top:6px}
+.wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:420px}
+th,td{padding:8px 6px;border-bottom:1px solid var(--bd);text-align:center}
+th:first-child,td:first-child{text-align:left}
+.y{color:var(--ok);font-weight:700}.n{color:var(--bad);font-weight:700}
+.hide{display:none}
+
+@keyframes up{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes pop{0%{opacity:0;transform:scale(.6)}70%{transform:scale(1.06)}100%{opacity:1;transform:none}}
+@keyframes float{50%{transform:translateY(-7px) rotate(10deg)}}
+@keyframes shake{20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
+@keyframes shine{to{background-position:200% center}}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+@keyframes pulse{0%{box-shadow:0 0 0 0 var(--acc)}70%,100%{box-shadow:0 0 0 14px transparent}}
+.globe{display:inline-block;animation:float 3s ease-in-out infinite}
+h1 .t{background:linear-gradient(90deg,var(--acc),#e0a43a,var(--acc));background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 6s linear infinite}
+h1,.sub{animation:up .6s ease backwards}.sub{animation-delay:.15s}
+section:not(.hide){animation:up .5s ease backwards}
+#qs .card{animation:up .5s ease backwards;animation-delay:calc(var(--i)*90ms);transition:transform .2s,box-shadow .2s,border-color .2s}
+#qs .card:focus-within{transform:translateY(-3px);box-shadow:0 8px 20px rgba(0,0,0,.14);border-color:var(--acc)}
+input{transition:border-color .2s,box-shadow .2s}input:focus{outline:0;border-color:var(--acc);box-shadow:0 0 0 3px color-mix(in srgb,var(--acc) 30%,transparent)}
+button{transition:transform .15s,filter .15s}button:hover{transform:translateY(-2px);filter:brightness(1.1)}button:active{transform:scale(.95)}
+#go{animation:pulse 2s infinite}
+.bar{height:10px;background:var(--bd);border-radius:99px;overflow:hidden;margin:4px 0 6px}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--acc),#e0a43a);border-radius:99px;transition:width .5s cubic-bezier(.2,.8,.2,1)}
+.res{text-align:center}.res #mine .card{animation:pop .5s ease backwards}
+#board tr{animation:up .4s ease backwards}#board tr.me td{background:var(--okbg)}
+.conf{position:fixed;top:-20px;font-size:22px;pointer-events:none;z-index:50;animation:fall 3s ease-in forwards}
+
+@keyframes out{to{opacity:0;transform:translateX(-40px) scale(.97)}}
+@keyframes in{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:none}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes drift{50%{transform:translate(30px,-40px) scale(1.15)}}
+@keyframes wig{25%{transform:rotate(-16deg) scale(1.2)}75%{transform:rotate(16deg) scale(1.2)}}
+@keyframes rip{to{transform:scale(3);opacity:0}}
+@keyframes tick{0%{transform:scale(1)}40%{transform:scale(1.4) rotate(-10deg)}100%{transform:scale(1)}}
+.blob{position:fixed;width:320px;height:320px;border-radius:50%;filter:blur(70px);opacity:.25;pointer-events:none;z-index:0;animation:drift 14s ease-in-out infinite}
+.b1{background:var(--acc);top:-80px;left:-100px}.b2{background:#e0a43a;bottom:-100px;right:-100px;animation-delay:-6s}
+main{position:relative;z-index:1}
+section:not(.hide){animation:in .5s ease backwards}
+section.out{animation:out .35s ease forwards!important}
+.qh{display:flex;gap:10px;align-items:flex-start}
+.qn{flex:none;width:30px;height:30px;border-radius:50%;background:var(--bd);display:grid;place-items:center;font-weight:700;transition:background .3s,color .3s}
+.qi{flex:none;font-size:22px;display:inline-block}
+#qs .card:focus-within .qi{animation:wig .6s ease}
+#qs .card.done{border-color:var(--ok)}
+#qs .card.done .qn{background:var(--ok);color:var(--onacc);animation:tick .5s}
+button{position:relative;overflow:hidden}button:disabled{opacity:.85;cursor:wait}
+.rip{position:absolute;border-radius:50%;background:rgba(255,255,255,.45);transform:scale(0);animation:rip .6s ease-out;pointer-events:none}
+.sp{display:inline-block;width:14px;height:14px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:spin .7s linear infinite;vertical-align:-2px}
+
+.ghost{position:fixed;top:calc(10px + env(safe-area-inset-top,0px));right:12px;z-index:60;background:var(--card);color:var(--fg);border:1px solid var(--bd);padding:6px 10px;margin:0;border-radius:99px}
+.seg{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.seg button{margin:0;background:var(--bg);color:var(--fg);border:1px solid var(--bd);padding:8px 14px;font-weight:500}
+.seg button.on{background:var(--acc);color:var(--onacc);border-color:var(--acc);font-weight:700}
+.top{display:flex;justify-content:space-between;align-items:center;margin:4px 0}
+.pill{background:var(--card);border:1px solid var(--bd);border-radius:99px;padding:4px 12px;font-weight:700;font-variant-numeric:tabular-nums}
+.pill.low{color:var(--bad);border-color:var(--bad);animation:pulse2 1s infinite}
+@keyframes pulse2{50%{transform:scale(1.08)}}
+.hintbtn{margin:8px 0 0;padding:4px 10px;background:transparent;color:var(--acc);border:1px solid var(--acc);font-size:.85rem}
+.hd{max-height:0;overflow:hidden;opacity:0;color:var(--mut);font-size:.9rem;transition:max-height .4s,opacity .4s,margin .4s}
+.hd.open{max-height:90px;opacity:1;margin-top:8px}
+.row{display:grid;grid-template-columns:92px 1fr 44px;gap:8px;align-items:center;margin:6px 0;font-size:.88rem}
+.track{height:12px;background:var(--bd);border-radius:99px;overflow:hidden}
+.track i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--acc),#e0a43a);transition:width 1s cubic-bezier(.2,.8,.2,1)}
+.dn{display:flex;align-items:center;gap:14px;margin:8px 0}
+textarea{width:100%;height:110px;font:12px monospace;background:var(--bg);color:var(--fg);border:1px solid var(--bd);border-radius:8px;padding:8px;margin-top:8px}
+.tag{font-size:.78rem;font-weight:700;color:var(--acc);margin-bottom:2px}.tag.hard{color:var(--bad)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+@keyframes pulse2{50%{transform:scale(1.18)}}
+.top{display:flex;align-items:center;gap:8px}.top h1{flex:1}
+.ib{margin:0;padding:8px 10px;background:var(--card);color:var(--fg);border:1px solid var(--bd);font-size:18px}
+.chips,.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.chip{margin:0;background:var(--bg);color:var(--fg);border:2px solid var(--bd);padding:8px 12px}
+.chip.on{border-color:var(--acc);background:var(--okbg);animation:tick .4s}
+.tabs{margin:0 0 10px}.tabs button{margin:0;padding:7px 12px;background:var(--card);color:var(--fg);border:1px solid var(--bd)}.tabs button.on{background:var(--acc);color:var(--onacc)}
+.hb{background:transparent;color:var(--acc);padding:4px 0;margin-top:8px;font-size:.9rem}
+.hx{max-height:0;overflow:hidden;transition:max-height .4s,margin .4s;color:var(--mut);font-size:.92rem}.hx.open{max-height:120px;margin-top:6px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.tm{font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}.tm.warn{color:var(--bad);animation:pulse2 1s infinite}
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;margin-top:12px}.g2 .card{margin:0}
+.ct{font-weight:700;margin-bottom:8px}
+.br{display:grid;grid-template-columns:34px 1fr 64px;gap:8px;align-items:center;margin:6px 0;font-size:.85rem}
+.bt{height:12px;background:var(--bd);border-radius:99px;overflow:hidden}.bt i{display:block;height:100%;width:0;background:var(--acc);border-radius:99px;transition:width 1s cubic-bezier(.2,.8,.2,1)}
+.vb{display:flex;align-items:flex-end;gap:8px;height:125px}
+.cw{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;font-size:.8rem}
+.cw i{display:block;width:100%;height:0;background:linear-gradient(var(--acc),#e0a43a);border-radius:6px 6px 0 0;transition:height 1s cubic-bezier(.2,.8,.2,1)}
+textarea{width:100%;height:110px;font:12px/1.4 monospace;background:var(--bg);color:var(--fg);border:1px solid var(--bd);border-radius:8px;padding:8px;margin-top:8px}
+</style>
+</head>
+<body>
+<div class="blob b1"></div><div class="blob b2"></div>
+<main>
+<div class="top"><h1><span class="globe">🌍</span> <span class="t">География, 8-сынып</span></h1><button class="ib" id="snd" title="Дыбыс">🔊</button><button class="ib" id="tch" title="Мұғалім">🔒</button></div>
+<p class="sub">Қоныстану және қалалар халқының саны</p>
+<div id="pw" class="card hide"><b>Мұғалімге арналған құпиясөз</b><input id="pwi" type="password"><div id="e0" class="err"></div><button id="pwb">Кіру</button></div>
+<section id="s1" class="card">
+  <label for="nm"><b>Аты-жөніңізді жазыңыз</b></label>
+  <input id="nm" maxlength="40" placeholder="Мысалы: Айгерім Сейтқызы" autocomplete="name">
+  <div style="margin-top:14px"><b>Деңгейді таңдаңыз</b></div><div class="chips" id="lv"></div>
+  <p class="hint" style="margin:8px 0 0">Әр деңгейде 5 есеп: 3-еуі орташа (1 ұпай), 2-еуі күрделі (2 ұпай). Деңгей өскен сайын ұпай көбейеді: 🟢 ×1, 🟡 ×2, 🔴 ×3.</p>
+  <div id="e1" class="err"></div>
+  <button id="go">Бастау</button>
+</section>
+<section id="s2" class="hide">
+  <div class="row"><h2 id="hi" style="margin:0;min-height:1.6em"></h2><span id="tm" class="tm"></span></div>
+  <div class="bar"><i id="pb"></i></div><p class="hint" id="pt"></p>
+  <p class="hint">Жауапты санмен жазыңыз. Қиын болса, «💡 Көмек» батырмасын басыңыз. Уақыт: 10 минут.</p>
+  <div id="qs"></div>
+  <div id="e2" class="err"></div>
+  <button id="send">Жауаптарды жіберу</button>
+</section>
+<section id="s3" class="hide">
+  <div class="card res"><svg viewBox="0 0 120 120" width="130" height="130"><circle cx="60" cy="60" r="52" fill="none" stroke="var(--bd)" stroke-width="10"/><circle id="ring" cx="60" cy="60" r="52" fill="none" stroke="var(--acc)" stroke-width="10" stroke-linecap="round" stroke-dasharray="326.7" stroke-dashoffset="326.7" transform="rotate(-90 60 60)" style="transition:stroke-dashoffset 1.3s cubic-bezier(.2,.8,.2,1)"/><text id="sc" x="60" y="69" text-anchor="middle" font-size="30" font-weight="700" fill="currentColor">0</text></svg><div><b id="me"></b></div><div id="msg" class="hint" style="margin-bottom:12px"></div><div id="mine"></div><button id="again" type="button">Басқа деңгейді шешу</button></div>
+</section>
+<h2>Нәтижелер</h2>
+<div class="tabs" id="tabs"></div>
+<div id="board" class="card"><span class="hint">Жүктелуде…</span></div>
+<div id="charts"></div>
+<div id="tp"></div>
+</main>
+<script>
+const TPW="mugalim";
+const ICONS=["🗺️","📈","🏙️","⚖️","🚌"];
+const LV=[
+{e:"🟢",n:"Жеңіл",tasks:[
+{u:"адам",a:500,q:"Ауылда 2 000 адам тұрады. Оның 25%-ы — балалар. Ауылда қанша бала бар?",h:"25% = 0,25. Ауыл халқын 0,25-ке көбейтіңіз."},
+{u:"адам",a:2000,q:"Қаланың ауданы 50 км², халықтың орташа тығыздығы 1 км²-ге 40 адамнан келеді. Қала халқы қанша?",h:"Халық саны = тығыздық × аудан."},
+{u:"%",a:60,q:"Облыста қала халқы 600 мың, ауыл халқы 400 мың адам. Қала халқы жалпы халықтың неше пайызын құрайды?",h:"Үлес = қала халқы ÷ барлық халық × 100%."},
+{u:"адам",a:900,q:"Екі ауылда барлығы 1 200 адам тұрады. Бірінші ауылда 300 адам. Теңдеу құрып, екінші ауыл халқын табыңыз.",h:"Теңдеу: x + 300 = 1 200, сонда x = 1 200 − 300."},
+{u:"%",a:10,q:"5 жылда қала халқы 200 000-нан 220 000-ға өсті. Халық неше пайызға өсті?",h:"Өсім = 20 000. Өсім % = 20 000 ÷ 200 000 × 100%."}]},
+{e:"🟡",n:"Орта",tasks:[
+{u:"км²",a:150000,q:"Облыста 1 800 000 адам тұрады, халықтың орташа тығыздығы 1 км²-ге 12 адамнан келеді. Пропорция құрып, облыстың ауданын табыңыз.",h:"Пропорция: 12 / 1 = 1 800 000 / x, яғни x = 1 800 000 ÷ 12."},
+{u:"адам",a:1200000,q:"10 жылда қала халқы 15%-ға өсіп, 1 380 000 адам болды. Теңдеу құрып (1,15x = 1 380 000), 10 жыл бұрынғы халық санын табыңыз.",h:"x = 1 380 000 ÷ 1,15."},
+{u:"адам",a:1500000,q:"Аймақтағы қала және ауыл халқының қатынасы 3 : 2. Барлығы 2 500 000 адам тұрады. Теңдеу құрып (3x + 2x = 2 500 000), қала халқының санын табыңыз.",h:"5x = 2 500 000 теңдеуінен x-ті тауып, 3-ке көбейтіңіз."},
+{u:"мың адам",a:800,q:"А қаласының халқы Б қаласынан 240 мың адамға көп. Екеуінде барлығы 1 360 мың адам тұрады. Теңдеу құрып, А қаласының халқын табыңыз.",h:"Б қаласы = x, А қаласы = x + 240. x + (x + 240) = 1 360 теңдеуін шешіңіз."},
+{u:"адам",a:30000,q:"Ауданның ауыл халқы 750 000 адам. Оның 4%-ы қалаға көшіп кетті. Қанша адам көшті?",h:"750 000 × 0,04."}]},
+{e:"🔴",n:"Олимпиада",tasks:[
+{u:"адам",a:121000,q:"Қала халқы жыл сайын 10%-ға өседі. Қазір 100 000 адам тұрады. 2 жылдан кейін қала халқы қанша болады?",h:"Әр жылы халық 1,1 есе көбейеді: 100 000 × 1,1 × 1,1."},
+{u:"адам",a:1500000,q:"Облыста қала және ауыл халқының қатынасы 7 : 3. Ауыл халқы 450 000 адам. Облыстың барлық халқын табыңыз.",h:"3 бөлік = 450 000 болса, 1 бөлік = 150 000. Барлығы 7 + 3 = 10 бөлік."},
+{u:"адам",a:120000,q:"Ауданы 40 000 км² аймақтың халық тығыздығы 1 км²-ге 5 адам. Халықтың 60%-ы қалада тұрады. Қала халқы қанша?",h:"Халық = 5 × 40 000 = 200 000. Сосын 60%-ын табыңыз."},
+{u:"адам",a:480000,q:"Қала халқы 500 000 еді. Алдымен 20%-ға өсті, кейін 20%-ға кеміді. Соңында халық қанша болды?",h:"Алдымен × 1,2, кейін × 0,8: 500 000 × 1,2 × 0,8."},
+{u:"мың адам",a:300,q:"Екі қала халқының қатынасы 3 : 5, айырмасы 120 мың адам. Үлкен қала халқы қанша?",h:"Халық 3x және 5x. 5x − 3x = 120, x = 60, үлкені 5x."}]}
+];
+const ORD=[[0,1,2,3,4],[4,0,2,1,3],[0,2,1,3,4]];
+LV.forEach((l,i)=>{l.tasks=ORD[i].map(k=>l.tasks[k]);l.tasks.forEach((t,j)=>t.d=j<3?1:2)});
+const pts=(t,l)=>t.d*(l+1);
+const $=id=>document.getElementById(id);
+const mk=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!==undefined)e.textContent=x;return e};
+let lv=1,TASKS=LV[1].tasks,name="",mine=null,all=[],firstBoard=true,bl=1,tOn=false,snd=true,AC=null,left=600,tmr=null,sent=false,pn=0;
+
+function beep(f,d,t,ty){if(!snd)return;try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();const o=AC.createOscillator(),g=AC.createGain(),s=AC.currentTime+(t||0);o.type=ty||"sine";o.frequency.value=f;g.gain.setValueAtTime(.1,s);g.gain.exponentialRampToValueAtTime(.001,s+(d||.12));o.connect(g);g.connect(AC.destination);o.start(s);o.stop(s+(d||.12))}catch(e){}}
+function num(s){return parseFloat(String(s).replace(/\s/g,"").replace(",","."))}
+function err(el,m){el.textContent=m;el.style.animation="none";el.offsetWidth;el.style.animation="shake .4s";beep(200,.15,0,"square")}
+function go(a,b,cb){a.classList.add("out");setTimeout(()=>{a.classList.add("hide");a.classList.remove("out");b.classList.remove("hide");if(cb)cb()},350)}
+function type(el,t){const a=Array.from(t);el.textContent="";let i=0;const iv=setInterval(()=>{el.textContent=a.slice(0,++i).join("");if(i>=a.length)clearInterval(iv)},45)}
+function confetti(){if(matchMedia("(prefers-reduced-motion:reduce)").matches)return;const E=["🎉","⭐","🌍","✨","🏙️"];for(let i=0;i<40;i++){const c=mk("span","conf",E[i%5]);c.style.left=Math.random()*100+"vw";c.style.animationDelay=Math.random()*1.2+"s";c.style.animationDuration=(2.5+Math.random()*2)+"s";document.body.append(c);setTimeout(()=>c.remove(),6000)}}
+document.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;const r=b.getBoundingClientRect(),s=mk("span","rip"),d=Math.max(r.width,r.height);s.style.cssText="width:"+d+"px;height:"+d+"px;left:"+(e.clientX-r.left-d/2)+"px;top:"+(e.clientY-r.top-d/2)+"px";b.append(s);setTimeout(()=>s.remove(),600)});
+
+const KEY="geo-quiz-results";
+async function save(d){all.push(d);try{localStorage.setItem(KEY,JSON.stringify(all))}catch(e){}}
+async function init(){try{all=JSON.parse(localStorage.getItem(KEY)||"[]")}catch(e){all=[]}renderBoard()}
+
+LV.forEach((l,i)=>{const b=mk("button","chip"+(i===lv?" on":""),l.e+" "+l.n+" ×"+(i+1));b.type="button";b.onclick=()=>{lv=i;[...$("lv").children].forEach((c,j)=>c.classList.toggle("on",j===i));beep(600,.06)};$("lv").append(b)});
+
+function prog(){const n=TASKS.filter((_,i)=>!isNaN(num($("a"+i).value))).length;if(n>pn)beep(700,.07);pn=n;$("pb").style.width=(n/TASKS.length*100)+"%";TASKS.forEach((_,i)=>$("q"+i).classList.toggle("done",!isNaN(num($("a"+i).value))));$("pt").textContent=n+" / "+TASKS.length+" жауап берілді"}
+function buildQs(){const q=$("qs");q.textContent="";pn=0;TASKS.forEach((t,i)=>{
+  const d=mk("div","card");d.id="q"+i;d.style.setProperty("--i",i);
+  const h=mk("div","qh"),p=mk("div");p.style.flex="1";p.append(mk("div","tag"+(t.d===2?" hard":""),(t.d===2?"күрделі":"орташа")+" · "+pts(t,lv)+" ұпай"),document.createTextNode(t.q));h.append(mk("span","qn",i+1),p,mk("span","qi",ICONS[i]));
+  const inp=mk("input");inp.id="a"+i;inp.inputMode="decimal";inp.placeholder="Жауабы ("+t.u+")";inp.addEventListener("input",prog);
+  const hb=mk("button","hb","💡 Көмек"),hx=mk("div","hx",t.h);hb.type="button";hb.onclick=()=>{hx.classList.toggle("open");beep(520,.08)};
+  d.append(h,inp,hb,hx);q.append(d)});prog()}
+
+function showT(){const m=Math.floor(left/60),s=left%60,e=$("tm");e.textContent="⏱ "+m+":"+String(s).padStart(2,"0");e.classList.toggle("warn",left<=60)}
+function startT(){clearInterval(tmr);left=600;showT();tmr=setInterval(()=>{left--;showT();if(left<=10&&left>0)beep(1000,.05);if(left<=0){clearInterval(tmr);submit(true)}},1000)}
+
+$("go").onclick=()=>{
+  const v=$("nm").value.trim();
+  if(v.length<2){err($("e1"),"Атыңызды жазыңыз.");return}
+  name=v;TASKS=LV[lv].tasks;sent=false;buildQs();
+  const b=$("send");b.disabled=false;b.textContent="Жауаптарды жіберу";
+  go($("s1"),$("s2"),()=>{type($("hi"),"Сәлем, "+name+"! Сәттілік! 🍀");startT()});
+};
+
+async function submit(auto){
+  if(sent)return;
+  const vals=TASKS.map((_,i)=>num($("a"+i).value));
+  if(!auto&&vals.some(isNaN)){err($("e2"),"Барлық 5 тапсырмаға жауап жазыңыз.");return}
+  sent=true;clearInterval(tmr);$("e2").textContent="";
+  const ok=TASKS.map((t,i)=>Math.abs(vals[i]-t.a)<1e-6);
+  const pt=TASKS.map(t=>pts(t,lv)),mx=pt.reduce((a,b)=>a+b,0);
+  mine={name,lv,ok,pt,mx,score:ok.reduce((a,o,i)=>a+(o?pt[i]:0),0),t:Date.now(),v:vals.map(v=>isNaN(v)?null:v)};
+  const btn=$("send");btn.disabled=true;btn.innerHTML='<span class="sp"></span> Тексерілуде…';
+  await new Promise(r=>setTimeout(r,1000));
+  go($("s2"),$("s3"),showMine);
+  await save(mine);renderBoard();
+}
+$("send").onclick=()=>submit(false);
+$("again").onclick=()=>{$("ring").style.strokeDashoffset=326.7;go($("s3"),$("s1"))};
+
+function showMine(){
+  $("s3").classList.remove("hide");bl=lv;firstBoard=true;
+  const n=mine.mx,sc=mine.score;
+  $("me").textContent=mine.name+" · "+LV[lv].e+" "+LV[lv].n+" · "+sc+" / "+n+" ұпай";
+  $("msg").textContent=sc===n?"Тамаша! Бәрі дұрыс! 🎉":sc/n>=.6?"Жарайсың! Жақсы нәтиже 👍":"Тағы бір рет қарап шық, келесіде міндетті шығады 💪";
+  setTimeout(()=>{$("ring").style.strokeDashoffset=326.7*(1-sc/n)},100);
+  let k=0;const el=$("sc");el.textContent="0";
+  if(sc>0){const iv=setInterval(()=>{k++;el.textContent=k;if(k>=sc)clearInterval(iv)},1100/sc)}
+  const box=$("mine");box.textContent="";
+  TASKS.forEach((_,i)=>{
+    const d=mk("div","card "+(mine.ok[i]?"ok":"bad"),(i+1)+"-тапсырма · "+mine.pt[i]+" ұпай: "+(mine.ok[i]?"✓ дұрыс":"✗ қате"));
+    d.style.animationDelay=(0.4+i*0.18)+"s";box.append(d);
+    beep(mine.ok[i]?880:220,.15,.4+i*.18,mine.ok[i]?"sine":"square");
+  });
+  if(sc>=4){setTimeout(confetti,500);[523,659,784,1047].forEach((f,i)=>beep(f,.2,1.4+i*.15))}
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function bar(l,p,t,d){const r=mk("div","br"),tr=mk("div","bt"),f=mk("i");tr.append(f);r.append(mk("span",0,l),tr,mk("b",0,t));setTimeout(()=>f.style.width=p+"%",60+d);return r}
+function charts(rows){
+  const c=$("charts");c.textContent="";const g=mk("div","g2"),n=rows.length,T=LV[bl].tasks;
+  const c1=mk("div","card");c1.append(mk("div","ct","Тапсырма бойынша дұрыс жауап (%)"));
+  T.forEach((_,i)=>{const p=Math.round(rows.filter(r=>r.ok[i]).length/n*100);c1.append(bar("№"+(i+1),p,p+"%",i*120))});
+  const cnt=[0,0,0,0,0,0];rows.forEach(r=>cnt[r.ok.filter(Boolean).length]++);const mx=Math.max(...cnt,1);
+  const c2=mk("div","card");c2.append(mk("div","ct","Дұрыс жауап саны бойынша оқушылар"));const vb=mk("div","vb");
+  cnt.forEach((k,j)=>{const w=mk("div","cw"),f=mk("i");w.append(mk("span",0,k),f,mk("span","hint",j));vb.append(w);setTimeout(()=>f.style.height=(k/mx*80)+"px",100+j*100)});c2.append(vb);
+  const okc=rows.reduce((a,r)=>a+r.ok.filter(Boolean).length,0),fr=okc/(n*5);
+  const c3=mk("div","card res");c3.append(mk("div","ct","Барлық жауаптар: дұрыс / қате"));
+  c3.insertAdjacentHTML("beforeend",'<svg viewBox="0 0 120 120" width="120" height="120"><circle cx="60" cy="60" r="46" fill="none" stroke="var(--bad)" stroke-opacity=".35" stroke-width="14"/><circle class="dn" cx="60" cy="60" r="46" fill="none" stroke="var(--ok)" stroke-width="14" stroke-linecap="round" stroke-dasharray="289" stroke-dashoffset="289" transform="rotate(-90 60 60)" style="transition:stroke-dashoffset 1.2s cubic-bezier(.2,.8,.2,1)"/><text x="60" y="66" text-anchor="middle" font-size="20" font-weight="700" fill="currentColor">'+Math.round(fr*100)+'%</text></svg>');
+  setTimeout(()=>{const e=c3.querySelector(".dn");if(e)e.style.strokeDashoffset=289*(1-fr)},150);
+  g.append(c1,c2,c3);
+  if(mine&&mine.lv===bl){const mxx=mine.mx,avg=rows.reduce((a,r)=>a+r.score,0)/n,c4=mk("div","card");c4.append(mk("div","ct","Сіз және сынып орташасы (ұпай)"));c4.append(bar("Сіз",mine.score/mxx*100,mine.score+" / "+mxx,0),bar("Орта",avg/mxx*100,avg.toFixed(1)+" / "+mxx,150));g.append(c4)}
+  c.append(g);
+}
+function renderT(){
+  const p=$("tp");p.textContent="";if(!tOn)return;
+  const c=mk("div","card");c.append(mk("div","ct","🔑 Мұғалім: дұрыс жауаптар ("+LV[bl].e+" "+LV[bl].n+")"));
+  LV[bl].tasks.forEach((t,i)=>c.append(mk("div","hint",(i+1)+"-тапсырма: "+t.a+" "+t.u+" ("+pts(t,bl)+" ұпай)")));
+  c.append(mk("div","hint","Төмендегі кестені көшіріп, Excel немесе Google Sheets-ке қойыңыз:"));
+  const ta=mk("textarea");ta.readOnly=true;
+  ta.value=["Аты\tДеңгей\tҰпай\t1\t2\t3\t4\t5\tЖауаптар",...all.map(r=>[String(r.name).replace(/[\t\n]/g," "),LV[r.lv===undefined?1:r.lv].n,r.score,...r.ok.map(v=>v?1:0),(r.v||[]).join(" | ")].join("\t"))].join("\n");
+  const cb=mk("button",0,"📋 Көшіру");cb.onclick=()=>{ta.select();try{document.execCommand("copy");cb.textContent="✓ Көшірілді"}catch(e){}};
+  c.append(ta,cb);p.append(c);
+}
+function renderBoard(){
+  const tb=$("tabs");tb.textContent="";
+  LV.forEach((l,i)=>{const b=mk("button",i===bl?"on":"",l.e+" "+l.n);b.onclick=()=>{bl=i;firstBoard=true;renderBoard()};tb.append(b)});
+  const rows=all.filter(r=>(r.lv===undefined?1:r.lv)===bl).sort((a,b)=>(b.score-a.score)||(a.t-b.t));
+  const b=$("board");b.textContent="";
+  if(!rows.length){b.append(mk("span","hint","Бұл деңгейде әзірге ешкім тапсырған жоқ."));$("charts").textContent="";renderT();return}
+  const w=mk("div","wrap"),t=document.createElement("table"),hr=t.insertRow();
+  ["Аты-жөні",...LV[bl].tasks.map((_,i)=>String(i+1)),"Ұпай"].forEach(h=>hr.append(mk("th",0,h)));
+  rows.forEach((r,ri)=>{
+    const tr=t.insertRow();
+    if(firstBoard)tr.style.animationDelay=(ri*70)+"ms";else tr.style.animation="none";
+    if(mine&&r.t===mine.t&&r.name===mine.name)tr.className="me";
+    const md=["🥇","🥈","🥉"][ri];tr.insertCell().textContent=(md&&r.score>0?md+" ":"")+String(r.name||"");
+    r.ok.forEach(v=>{const c=tr.insertCell();c.textContent=v?"✓":"✗";c.className=v?"y":"n"});
+    tr.insertCell().textContent=r.score+" / "+(r.mx||r.ok.length);
+  });
+  w.append(t);b.append(w);firstBoard=false;
+  charts(rows);renderT();
+}
+$("tch").onclick=()=>{if(tOn){tOn=false;$("tch").textContent="🔒";renderT();return}$("pw").classList.toggle("hide");$("pwi").focus()};
+$("pwb").onclick=()=>{if($("pwi").value===TPW){tOn=true;$("tch").textContent="🔓";$("pw").classList.add("hide");$("pwi").value="";$("e0").textContent="";renderT();beep(784,.15)}else err($("e0"),"Құпиясөз қате.")};
+$("snd").onclick=()=>{snd=!snd;$("snd").textContent=snd?"🔊":"🔇";beep(660,.08)};
+init();
+</script>
+</body>
+</html>
